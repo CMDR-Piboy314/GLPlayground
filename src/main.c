@@ -208,7 +208,7 @@ int main() {
 
 		stbi_image_free(data);
 	}
-
+	
 	else {
 		printf("Failed to load image at res/img/Piboy314.png!\n");
 	}
