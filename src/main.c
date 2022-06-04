@@ -8,6 +8,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "../lib/stb/stb_image.h"
+
 #include "shader.h"
 
 // Define constants
@@ -263,7 +266,7 @@ int main() {
 
 	// Unbind VAO + Registered VBO
 	// glBindBuffer(GL_ARRAY_BUFFER, 0); 
-	glBindVertexArray(0); 
+	glBindVertexArray(0);
 
 	// Program loop
 	while (!glfwWindowShouldClose(window)) {
