@@ -6,7 +6,7 @@
 
 #include <glad/glad.h>
 
-int ID;
+int shaderID;
 
 const char* loadFile(char* filepath) {
 	FILE *file = fopen(filepath, "r");
@@ -81,13 +81,13 @@ void shaderInit(const char* vertexPath, const char* fragmentPath) {
 	shaderCheckCompileErrors(fragment, "FRAGMENT");
 
 	// Shader Program
-	ID = glCreateProgram();
+	shaderID = glCreateProgram();
 
-	glAttachShader(ID, vertex);
-	glAttachShader(ID, fragment);
+	glAttachShader(shaderID, vertex);
+	glAttachShader(shaderID, fragment);
 
-	glLinkProgram(ID);
-	shaderCheckCompileErrors(ID, "PROGRAM");
+	glLinkProgram(shaderID);
+	shaderCheckCompileErrors(shaderID, "PROGRAM");
 
 	// Delete the shaders as they're linked into the program now and no longer needed
 	glDeleteShader(vertex);
@@ -96,20 +96,20 @@ void shaderInit(const char* vertexPath, const char* fragmentPath) {
 
 // Activate the shader
 void shaderUse() {
-	glUseProgram(ID);
+	glUseProgram(shaderID);
 }
 
 // Utility uniform functions
 // void setBool(const char* name, bool value) {
-//     glUniform1i(glGetUniformLocation(ID, &name), (int)value);
+//     glUniform1i(glGetUniformLocation(shaderID, &name), (int)value);
 // }
 
 void shaderSetInt(const char *name, int value) {
-	glUniform1i(glGetUniformLocation(ID, name), value);
+	glUniform1i(glGetUniformLocation(shaderID, name), value);
 }
 
 void shaderSetFloat(const char *name, float value) {
-	glUniform1f(glGetUniformLocation(ID, name), value);
+	glUniform1f(glGetUniformLocation(shaderID, name), value);
 }
 
 #endif

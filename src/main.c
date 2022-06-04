@@ -199,14 +199,43 @@ int main() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load("res/img/Piboy314.png", &width, &height, &nrChannels, 0);
+
+	stbi_set_flip_vertically_on_load(1);
+	unsigned char *data = stbi_load("res/img/container.jpg", &width, &height, &nrChannels, 0);
 
 	if (data) {
-		// Texture target, Mipmap level, width, height, 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		stbi_image_free(data);
+	}
+
+	else {
+		printf("Failed to load image at res/img/container.jpg!\n");
+	}
+
+	unsigned int texture2;
+	
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	// Set texture wrapping and filtering options
+
+	// Wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	unsigned char *data2 = stbi_load("res/img/Piboy314.png", &width, &height, &nrChannels, 0);
+
+	if (data2) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		stbi_image_free(data2);
 	}
 
 	else {
@@ -236,9 +265,20 @@ int main() {
 		// Clear the window
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		// Activate the texture unit before binding the texture
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		// Render the triangle
 		shaderUse();
+
+		// Set uniforms
+		shaderSetInt("texture1", 0);
+		shaderSetInt("texture2", 1);
+
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
