@@ -22,6 +22,8 @@ int wireframe = 0;
 int changeWireframe = 0;
 int jAlreadyPressed = 0;
 
+int vsyncEnabled = 1;
+
 const char *vertexShaderSource;
 
 const char *fragmentShaderSource;
@@ -118,6 +120,9 @@ int main() {
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
+	if (vsyncEnabled)
+		glfwSwapInterval(1);
+
 	shaderInit("src/shaders/tri.vert", "src/shaders/tri.frag");
 
 	float vertices[] = {
@@ -183,8 +188,22 @@ int main() {
 	
 	// glGenTextures(texture);
 
+	double lastTime = glfwGetTime();
+	int frameCount = 0;
+
 	// Program loop
 	while (!glfwWindowShouldClose(window)) {
+		double thisTime = glfwGetTime();
+		frameCount++;
+
+		// If a second has passed.
+		if (thisTime - lastTime >= 1.0) {
+			printf("%i\n", frameCount);
+
+			frameCount = 0;
+			lastTime = thisTime;
+		}
+
 		processInput(window);
 
 		// Clear the window
