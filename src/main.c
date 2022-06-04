@@ -122,6 +122,8 @@ int main() {
 
 	if (vsyncEnabled)
 		glfwSwapInterval(1);
+	else
+		glfwSwapInterval(0);
 
 	shaderInit("src/shaders/tri.vert", "src/shaders/tri.frag");
 
@@ -198,7 +200,7 @@ int main() {
 
 		// If a second has passed.
 		if (thisTime - lastTime >= 1.0) {
-			printf("%i\n", frameCount);
+			printf("%i FPS\n", frameCount);
 
 			frameCount = 0;
 			lastTime = thisTime;
