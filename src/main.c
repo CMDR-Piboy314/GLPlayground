@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "../lib/glad/include/glad/glad.h"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../lib/stb/stb_image.h"
+#include <stb_image.h>
 
 #include "shader.h"
 
