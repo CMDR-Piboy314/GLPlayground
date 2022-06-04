@@ -183,15 +183,43 @@ int main() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// Load and create texture
-	// unsigned int texture;
+	unsigned int texture;
 	
-	// glGenTextures(texture);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
+	// Set texture wrapping and filtering options
+
+	// Wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, nrChannels;
+	unsigned char *data = stbi_load("res/img/Piboy314.png", &width, &height, &nrChannels, 0);
+
+	if (data) {
+		// Texture target, Mipmap level, width, height, 
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		stbi_image_free(data);
+	}
+
+	else {
+		printf("Failed to load image at res/img/Piboy314.png!\n");
+	}
+
+	// Initialize variables for framerate counting
 	double lastTime = glfwGetTime();
 	int frameCount = 0;
 
 	// Program loop
 	while (!glfwWindowShouldClose(window)) {
+		// Calculate framerate
 		double thisTime = glfwGetTime();
 		frameCount++;
 
