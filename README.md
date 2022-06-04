@@ -7,9 +7,13 @@ Playground for Learning OpenGL - [Learn OpenGL](https://learnopengl.com)
 - if vsyncEnabled is 0, vSync will be disabled
 - Default is 1
 
+<br/>
+
 ### int wireframe - If wireframe is enabled or disabled when the program is started
 - if wireframe is 1, wireframe will be enabled (unless changed during runtime)
 - if wireframe is 0, wireframe will be disabled (unless changed during runtime)
+  
+<br/>
 
 ## Keybinds
 ### J
