@@ -22,11 +22,8 @@ int wireframe = 0;
 int changeWireframe = 0;
 int jAlreadyPressed = 0;
 
+// Vsync is enabled by default - to disable it change this variable to 0
 int vsyncEnabled = 1;
-
-const char *vertexShaderSource;
-
-const char *fragmentShaderSource;
 
 // Define functions
 
