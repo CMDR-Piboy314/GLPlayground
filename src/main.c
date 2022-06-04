@@ -140,8 +140,19 @@ int main() {
 
 	shaderInit("src/shaders/tri.vert", "src/shaders/tri.frag");
 
-	// vertexShaderSource = loadfile("src/shaders/tri.frag");
-	// fragmentShaderSource = loadfile("src/shaders/tri.vert");
+	float vertices[] = {
+		// Positions        |      Colours      | Texture Coords
+        //X      Y     Z    |  R     G     B    |  X     Y
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+    };
+
+    unsigned int indices[] = {  
+        0, 1, 3, // First triangle
+        1, 2, 3  // Second triangle
+    };
 
 	// Create VAO + VBO + EBO
 	// NOTE: The VAO stores
@@ -150,121 +161,62 @@ int main() {
 	// 3. Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.
 
 	// An EBO is a buffer that stores indices that OpenGL uses to decide what vertices to draw (indexed drawing)
-	unsigned int VBO, VAO, EBO;
+    unsigned int VBO, VAO, EBO;
+	
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindVertexArray(VAO);
 
 	// Ways for the graphics card to manage the data
 	// 1. GL_STREAM_DRAW:  Data is set only once and used by the GPU at most a few times.
 	// 2. GL_STATIC_DRAW:  Data is set only once and used many times.
 	// 3. GL_DYNAMIC_DRAW: Data is changed a lot and used many times.
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// Copy vertex data into buffer's memory
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); 
-
-	unsigned int vertexShader;
-	
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-	// Attach the source code of the vertex shader to the vertex shader object
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-
-	glCompileShader(vertexShader);
-
-	// Check if shader compilation was successful
-	int success;
-	char infoLog[512];
-
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-
-	if (!success) {
-		printf("Shader compilation failed! %s\n", infoLog);
-	}
-
-	unsigned int fragmentShader;
-
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-
-	if (!success) {
-		printf("Shader compilation failed! %s\n", infoLog);
-	}
-
-	// Combine the frag and vert shaders into a single shaderProgram object
-	unsigned int shaderProgram;
-
-	shaderProgram = glCreateProgram();
-
-	// Attatch and link
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-
-	if (!success) {
-		printf("shaderProgram failed to link! %s\n", infoLog);
-	}
-
-	glUseProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// Tell OpenGL how to handle the vertex data
 	// NOTE: Each vertex attribute takes its data from memory managed by a VBO
 	// and which VBO it takes its data from is determined by the VBO currently bound to GL_ARRAY_BUFFER when calling glVertexAttribPointer.
 	// Since the previously defined VBO is still bound before calling glVertexAttribPointer vertex attribute 0 is now associated with its vertex data.
 
-	// Position attrib
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-	// Colour attrib
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
-	glEnableVertexAttribArray(1);
+    // Colour attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-	// Unbind VAO + Registered VBO
-	// glBindBuffer(GL_ARRAY_BUFFER, 0); 
-	glBindVertexArray(0);
+    // Texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
 	// Program loop
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
+		// Clear the window
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Render the triangle
 		shaderUse();
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window); // Swap the front and back buffers
 		glfwPollEvents(); // Check for events (mouse movement, mouse click, keyboard press, keyboard release etc.)
 	}
 
-	// Clean up VAO, VBO and shaderProgram
+	// Clean up VAO, VBO and EBO
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
 	// Clean up GLFW
 	glfwTerminate();
