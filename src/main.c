@@ -8,6 +8,9 @@
 #include <glad.h>
 #include <GLFW/glfw3.h>
 
+#include <cglm/cglm.h>
+#include <cglm/call.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
