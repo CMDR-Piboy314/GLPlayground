@@ -6,11 +6,9 @@
 
 #include <glad.h>
 
-// struct shader {
-// 	int shaderID;
-// }
-
-int shaderID;
+struct shaderStruct {
+	int shaderID;
+};
 
 const char* loadFile(char* filepath) {
 	FILE *file = fopen(filepath, "r");
@@ -60,7 +58,7 @@ void shaderCheckCompileErrors(unsigned int shader, char* type) {
 }
 
 // Constructor generates the shader on the fly
-void shaderInit(const char* vertexPath, const char* fragmentPath) {
+void shaderInit(struct shaderStruct* shaderStructInstance, const char* vertexPath, const char* fragmentPath) {
 	// 1. Get the source code from the files into strings
 	const char* vShaderCode = loadFile("src/shaders/tri.vert");
 	const char * fShaderCode = loadFile("src/shaders/tri.frag");
@@ -85,13 +83,13 @@ void shaderInit(const char* vertexPath, const char* fragmentPath) {
 	shaderCheckCompileErrors(fragment, "FRAGMENT");
 
 	// Shader Program
-	shaderID = glCreateProgram();
+	shaderStructInstance->shaderID = glCreateProgram();
 
-	glAttachShader(shaderID, vertex);
-	glAttachShader(shaderID, fragment);
+	glAttachShader(shaderStructInstance->shaderID, vertex);
+	glAttachShader(shaderStructInstance->shaderID, fragment);
 
-	glLinkProgram(shaderID);
-	shaderCheckCompileErrors(shaderID, "PROGRAM");
+	glLinkProgram(shaderStructInstance->shaderID);
+	shaderCheckCompileErrors(shaderStructInstance->shaderID, "PROGRAM");
 
 	// Delete the shaders as they're linked into the program now and no longer needed
 	glDeleteShader(vertex);
@@ -99,8 +97,8 @@ void shaderInit(const char* vertexPath, const char* fragmentPath) {
 }
 
 // Activate the shader
-void shaderUse() {
-	glUseProgram(shaderID);
+void shaderUse(struct shaderStruct* shaderStructInstance) {
+	glUseProgram(shaderStructInstance->shaderID);
 }
 
 // Utility uniform functions
@@ -108,12 +106,12 @@ void shaderUse() {
 //     glUniform1i(glGetUniformLocation(shaderID, &name), (int)value);
 // }
 
-void shaderSetInt(const char *name, int value) {
-	glUniform1i(glGetUniformLocation(shaderID, name), value);
+void shaderSetInt(struct shaderStruct* shaderStructInstance, const char *name, int value) {
+	glUniform1i(glGetUniformLocation(shaderStructInstance->shaderID, name), value);
 }
 
-void shaderSetFloat(const char *name, float value) {
-	glUniform1f(glGetUniformLocation(shaderID, name), value);
+void shaderSetFloat(struct shaderStruct* shaderStructInstance, const char *name, float value) {
+	glUniform1f(glGetUniformLocation(shaderStructInstance->shaderID, name), value);
 }
 
 #endif

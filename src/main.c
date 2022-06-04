@@ -124,8 +124,11 @@ int main() {
 		glfwSwapInterval(1);
 	else
 		glfwSwapInterval(0);
+	
+	struct shaderStruct *myShaderPtr, myShader;
+	myShaderPtr = &myShader;
 
-	shaderInit("src/shaders/tri.vert", "src/shaders/tri.frag");
+	shaderInit(myShaderPtr, "src/shaders/tri.vert", "src/shaders/tri.frag");
 
 	float vertices[] = {
 		// Positions        |      Colours      | Texture Coords
@@ -279,11 +282,11 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		// Render the triangle
-		shaderUse();
+		shaderUse(myShaderPtr);
 
 		// Set uniforms
-		shaderSetInt("texture1", 0);
-		shaderSetInt("texture2", 1);
+		shaderSetInt(myShaderPtr, "texture1", 0);
+		shaderSetInt(myShaderPtr, "texture2", 1);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
