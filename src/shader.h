@@ -6,6 +6,10 @@
 
 #include <glad.h>
 
+// struct shader {
+// 	int shaderID;
+// }
+
 int shaderID;
 
 const char* loadFile(char* filepath) {
