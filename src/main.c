@@ -20,40 +20,11 @@
 // Define variables
 int wireframe = 0;
 int changeWireframe = 0;
-
-float vertices[] = {
-    // R     G     B  |  X     Y     Z
-	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // Bottom right
-	-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // Bottom left
-	 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f  // Top
-};
+int jAlreadyPressed = 0;
 
 const char *vertexShaderSource;
 
 const char *fragmentShaderSource;
-
-// const char *vertexShaderSource =
-// 	"#version 330 core\n"
-
-//     "layout (location = 0) in vec3 aPos;\n"
-//     "layout (location = 1) in vec3 aColor;\n"
-
-//     "out vec3 ourColor;\n"
-
-//     "void main() {\n"
-//     "   gl_Position = vec4(aPos, 1.0);\n"
-//     "   ourColor = aColor;\n"
-//     "}\0";
-
-// const char *fragmentShaderSource = 
-// 	"#version 330 core\n"
-
-//     "out vec4 FragColor;\n"
-//     "in vec3 ourColor;\n"
-
-//     "void main() {\n"
-//     "   FragColor = vec4(ourColor, 1.0f);\n"
-//     "}\n\0";
 
 // Define functions
 
@@ -64,18 +35,25 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 void processInput(GLFWwindow *window) {
+	changeWireframe = 0;
+
 	// If the escape key is pressed
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		// Tell GLFW the window should close
 		glfwSetWindowShouldClose(window, 1);
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-		changeWireframe = 1;
+	if (!jAlreadyPressed) {
+		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+			changeWireframe = 1;
+			jAlreadyPressed = 1;
+		}
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-		changeWireframe = 0;
+	else {
+		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_RELEASE) {
+			jAlreadyPressed = 0;
+		}
 	}
 
 	if (changeWireframe) {
@@ -138,6 +116,8 @@ int main() {
 	// Tell GLFW to call the frameBufferSizeCallback function when the window is resized
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+
 	shaderInit("src/shaders/tri.vert", "src/shaders/tri.frag");
 
 	float vertices[] = {
@@ -195,6 +175,13 @@ int main() {
     // Texture coord attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	// Load and create texture
+	// unsigned int texture;
+	
+	// glGenTextures(texture);
 
 	// Program loop
 	while (!glfwWindowShouldClose(window)) {
