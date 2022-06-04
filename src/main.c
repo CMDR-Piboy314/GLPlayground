@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <glad/glad.h>
+#include "../lib/glad/include/glad/glad.h"
 #include <GLFW/glfw3.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -208,7 +208,7 @@ int main() {
 
 		stbi_image_free(data);
 	}
-	
+
 	else {
 		printf("Failed to load image at res/img/Piboy314.png!\n");
 	}
