@@ -64,7 +64,6 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 void processInput(GLFWwindow *window) {
-
 	// If the escape key is pressed
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		// Tell GLFW the window should close
@@ -95,28 +94,6 @@ void processInput(GLFWwindow *window) {
 		}
 	}
 }
-
-// const char* loadfile(char* filepath) {
-// 	FILE *file = fopen(filepath, "r");
-// 	char *filecontents;
-
-// 	size_t n = 0;
-// 	int c;
-
-// 	if (file == NULL)
-// 		printf("Failed to load file at: %s!\n", filepath);
-
-// 	filecontents = malloc(1000);
-
-// 	while ((c = fgetc(file)) != EOF) {
-// 		filecontents[n++] = (char) c;
-// 	}
-
-// 	// Terminate with null character
-// 	filecontents[n] = '\0';
-
-// 	return filecontents;
-// }
 
 int main() {
 	glfwInit();
