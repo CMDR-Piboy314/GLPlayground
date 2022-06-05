@@ -11,9 +11,15 @@
 #include <cglm/cglm.h>
 #include <cglm/call.h>
 
+// #include <linmath.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+// #define NK_IMPLEMENTATION
+// #include <nuklear/nuklear.h>
+
+// Local includes
 #include "shader.h"
 
 // Define constants
@@ -280,6 +286,13 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
+
+		// Transformations
+		mat4 trans = {1.0f};
+		
+		glm_rotate(trans, glm_rad(90.0f), (vec3){0.0, 0.0, 1.0});
+
+		glm_scale(trans, (vec3){0.5, 0.5, 0.5});
 
 		// Render the triangle
 		shaderUse(myShaderPtr);
