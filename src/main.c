@@ -298,7 +298,7 @@ int main() {
 
 		// Get matrix's uniform location and set matrix
         shaderUse(myShaderPtr);
-        unsigned int transformLoc = glGetUniformLocation(myShaderPtr->shaderID, "transform");
+        GLint transformLoc = glGetUniformLocation(myShaderPtr->shaderID, "transform");
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, *transform);
 
         glBindVertexArray(VAO);
