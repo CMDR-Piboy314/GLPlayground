@@ -38,7 +38,7 @@ void shaderCheckCompileErrors(unsigned int shader, char* type) {
 	int success;
 	char infoLog[1024];
 
-	if (type != "PROGRAM") {
+	if (!strcmp("PROGRAM", type)) {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
 		if (!success) {
@@ -102,9 +102,32 @@ void shaderUse(struct shaderStruct* shaderStructInstance) {
 }
 
 // Utility uniform functions
-// void setBool(const char* name, bool value) {
-//     glUniform1i(glGetUniformLocation(shaderID, &name), (int)value);
-// }
+void shaderSetVec2(struct shaderStruct* shaderStructInstance, const char *name, const vec2 value) { 
+	glUniform2fv(glGetUniformLocation(shaderStructInstance->shaderID, name), 1, &value[0]); 
+}
+
+
+void shaderSetVec3(struct shaderStruct* shaderStructInstance, const char *name, const vec3 value) { 
+	glUniform3fv(glGetUniformLocation(shaderStructInstance->shaderID, name), 1, &value[0]); 
+}
+
+
+void shaderSetVec4(struct shaderStruct* shaderStructInstance, const char *name, const vec4 value) { 
+	glUniform4fv(glGetUniformLocation(shaderStructInstance->shaderID, name), 1, &value[0]); 
+}
+
+
+void shaderSetMat2(struct shaderStruct* shaderStructInstance, const char *name, const mat2 mat) {
+	glUniformMatrix2fv(glGetUniformLocation(shaderStructInstance->shaderID, name), 1, GL_FALSE, &mat[0][0]);
+}
+
+void shaderSetMat3(struct shaderStruct* shaderStructInstance, const char *name, const mat3 mat) {
+	glUniformMatrix3fv(glGetUniformLocation(shaderStructInstance->shaderID, name), 1, GL_FALSE, &mat[0][0]);
+}
+
+void shaderSetMat4(struct shaderStruct* shaderStructInstance, const char *name, const mat4 mat) {
+	glUniformMatrix4fv(glGetUniformLocation(shaderStructInstance->shaderID, name), 1, GL_FALSE, &mat[0][0]);
+}
 
 void shaderSetInt(struct shaderStruct* shaderStructInstance, const char *name, int value) {
 	glUniform1i(glGetUniformLocation(shaderStructInstance->shaderID, name), value);

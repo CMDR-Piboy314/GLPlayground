@@ -10,8 +10,7 @@
 
 #include <cglm/cglm.h>
 #include <cglm/call.h>
-
-// #include <linmath.h>
+#include <cglm/types.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -257,6 +256,11 @@ int main() {
 		printf("Failed to load image at res/img/Piboy314.png!\n");
 	}
 
+	// For each sampler tell openGL which texture unit it belongs to (only has to be done once)
+    shaderUse(myShaderPtr); 
+    shaderSetInt(myShaderPtr, "texture1", 0);
+    shaderSetInt(myShaderPtr, "texture2", 1);
+
 	// Initialize variables for framerate counting
 	double lastTime = glfwGetTime();
 	int frameCount = 0;
@@ -281,25 +285,21 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		// Activate the texture unit before binding the texture
+		// Bind textures on texture units
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		// Transformations
-		mat4 trans = {1.0f};
-		
-		glm_rotate(trans, glm_rad(90.0f), (vec3){0.0, 0.0, 1.0});
+		// Create transformations
+		mat4 transform = {{1.0f}};
+        glm_translate(transform, (vec3){0.5f, -0.5f, 0.0f});
+        glm_rotate(transform, (float)glfwGetTime(), (vec3){0.0f, 0.0f, 1.0f});
 
-		glm_scale(trans, (vec3){0.5, 0.5, 0.5});
-
-		// Render the triangle
-		shaderUse(myShaderPtr);
-
-		// Set uniforms
-		shaderSetInt(myShaderPtr, "texture1", 0);
-		shaderSetInt(myShaderPtr, "texture2", 1);
+		// Get matrix's uniform location and set matrix
+        shaderUse(myShaderPtr);
+        unsigned int transformLoc = glGetUniformLocation(myShaderPtr->shaderID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, *transform);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
