@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <glad.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <cglm/cglm.h>
@@ -37,106 +37,106 @@ int vsyncEnabled = 1;
 
 // Function to be called when the window is resized
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
-	// Tell OpenGL to use the full window again, with the new width and height
-	glViewport(0, 0, width, height);
+    // Tell OpenGL to use the full window again, with the new width and height
+    glViewport(0, 0, width, height);
 }
 
 void processInput(GLFWwindow *window) {
-	changeWireframe = 0;
+    changeWireframe = 0;
 
-	// If the escape key is pressed
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		// Tell GLFW the window should close
-		glfwSetWindowShouldClose(window, 1);
-	}
+    // If the escape key is pressed
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        // Tell GLFW the window should close
+        glfwSetWindowShouldClose(window, 1);
+    }
 
-	if (!jAlreadyPressed) {
-		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-			changeWireframe = 1;
-			jAlreadyPressed = 1;
-		}
-	}
+    if (!jAlreadyPressed) {
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+            changeWireframe = 1;
+            jAlreadyPressed = 1;
+        }
+    }
 
-	else {
-		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_RELEASE) {
-			jAlreadyPressed = 0;
-		}
-	}
+    else {
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_RELEASE) {
+            jAlreadyPressed = 0;
+        }
+    }
 
-	if (changeWireframe) {
-		changeWireframe = 0;
+    if (changeWireframe) {
+        changeWireframe = 0;
 
-		// If wireframe is 0 (disabled) enable it, vice versa
-		if (!wireframe) {
-			wireframe = 1;
+        // If wireframe is 0 (disabled) enable it, vice versa
+        if (!wireframe) {
+            wireframe = 1;
 
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		}
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
 
-		else {
-			wireframe = 0;
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
-	}
+        else {
+            wireframe = 0;
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+    }
 }
 
 int main() {
-	glfwInit();
+    glfwInit();
 
-	// Tell GLFW we want to use OpenGL 3.3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	
-	// Load only modern OpenGL functions, core profile
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // Tell GLFW we want to use OpenGL 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    
+    // Load only modern OpenGL functions, core profile
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	#ifdef __APPLE__
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	#endif
+    #ifdef __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    #endif
 
-	#ifdef __linux__
-		printf("                 .88888888:.\n                88888888.88888.\n              .8888888888888888.\n              888888888888888888\n              88\' _`88'_  `88888\n              88 88 88 88  88888\n              88_88_::_88_:88888\n              88:::,::,:::::8888\n              88`:::::::::\'`8888\n             .88  `::::\'    8:88.\n            8888            `8:888.\n          .8888\'             `888888.\n         .8888:..  .::.  ...:\'8888888:.\n        .8888.'     :'     `\'::`88:88888\n       .8888        \'         `.888:8888.\n      888:8         .           888:88888\n    .888:88        .:           888:88888:\n    8888888.       ::           88:888888\n    `.::.888.      ::          .88888888\n   .::::::.888.    ::         :::`8888\'.:.\n  ::::::::::.888   \'         .::::::::::::\n  ::::::::::::.8    \'      .:8::::::::::::.\n .::::::::::::::.        .:888:::::::::::::\n :::::::::::::::88:.__..:88888:::::::::::\'\n  `\'.:::::::::::88888888888.88:::::::::\'\n        `\':::_:' -- \'' -'-' `\':_::::\'`\n");
-	#endif
+    #ifdef __linux__
+        printf("                 .88888888:.\n                88888888.88888.\n              .8888888888888888.\n              888888888888888888\n              88\' _`88'_  `88888\n              88 88 88 88  88888\n              88_88_::_88_:88888\n              88:::,::,:::::8888\n              88`:::::::::\'`8888\n             .88  `::::\'    8:88.\n            8888            `8:888.\n          .8888\'             `888888.\n         .8888:..  .::.  ...:\'8888888:.\n        .8888.'     :'     `\'::`88:88888\n       .8888        \'         `.888:8888.\n      888:8         .           888:88888\n    .888:88        .:           888:88888:\n    8888888.       ::           88:888888\n    `.::.888.      ::          .88888888\n   .::::::.888.    ::         :::`8888\'.:.\n  ::::::::::.888   \'         .::::::::::::\n  ::::::::::::.8    \'      .:8::::::::::::.\n .::::::::::::::.        .:888:::::::::::::\n :::::::::::::::88:.__..:88888:::::::::::\'\n  `\'.:::::::::::88888888888.88:::::::::\'\n        `\':::_:' -- \'' -'-' `\':_::::\'`\n");
+    #endif
 
-	// Create window object, this object will hold all windowing data and required by most GLFW functions
-	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "GLPlayground", NULL, NULL);
+    // Create window object, this object will hold all windowing data and required by most GLFW functions
+    GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "GLPlayground", NULL, NULL);
 
-	if (window == NULL) {
-		printf("Failed to create GLFW window!\n");
+    if (window == NULL) {
+        printf("Failed to create GLFW window!\n");
 
-		glfwTerminate();
-		return -1;
-	}
+        glfwTerminate();
+        return -1;
+    }
 
-	// Tell GLFW to use the window object as the current context
-	glfwMakeContextCurrent(window);
+    // Tell GLFW to use the window object as the current context
+    glfwMakeContextCurrent(window);
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		printf("Failed to initialize GLAD\n");
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        printf("Failed to initialize GLAD\n");
 
-		return -1;
-	}
+        return -1;
+    }
 
 	// Tell OpenGL to use our entire window, starting from (0, 0) to the full window size in pixels
-	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	// Tell GLFW to call the frameBufferSizeCallback function when the window is resized
-	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    // Tell GLFW to call the frameBufferSizeCallback function when the window is resized
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
-	if (vsyncEnabled)
-		glfwSwapInterval(1);
-	else
-		glfwSwapInterval(0);
-	
-	struct shaderStruct *myShaderPtr, myShader;
-	myShaderPtr = &myShader;
+    if (vsyncEnabled)
+        glfwSwapInterval(1);
+    else
+        glfwSwapInterval(0);
+    
+    struct shaderStruct *myShaderPtr, myShader;
+    myShaderPtr = &myShader;
 
-	shaderInit(myShaderPtr, "src/shaders/tri.vert", "src/shaders/tri.frag");
+    shaderInit(myShaderPtr, "src/shaders/tri.vert", "src/shaders/tri.frag");
 
-	float vertices[] = {
-		// Positions        |      Colours      | Texture Coords
+    float vertices[] = {
+        // Positions        |      Colours      | Texture Coords
         //X      Y     Z    |  R     G     B    |  X     Y
          0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
          0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
@@ -149,25 +149,25 @@ int main() {
         1, 2, 3  // Second triangle
     };
 
-	// Create VAO + VBO + EBO
-	// NOTE: The VAO stores
-	// 1. Calls to glEnableVertexAttribArray or glDisableVertexAttribArray.
-	// 2. Vertex attribute configurations via glVertexAttribPointer.
-	// 3. Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.
+    // Create VAO + VBO + EBO
+    // NOTE: The VAO stores
+    // 1. Calls to glEnableVertexAttribArray or glDisableVertexAttribArray.
+    // 2. Vertex attribute configurations via glVertexAttribPointer.
+    // 3. Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.
 
-	// An EBO is a buffer that stores indices that OpenGL uses to decide what vertices to draw (indexed drawing)
+    // An EBO is a buffer that stores indices that OpenGL uses to decide what vertices to draw (indexed drawing)
     unsigned int VBO, VAO, EBO;
-	
+
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
 
-	// Ways for the graphics card to manage the data
-	// 1. GL_STREAM_DRAW:  Data is set only once and used by the GPU at most a few times.
-	// 2. GL_STATIC_DRAW:  Data is set only once and used many times.
-	// 3. GL_DYNAMIC_DRAW: Data is changed a lot and used many times.
+    // Ways for the graphics card to manage the data
+    // 1. GL_STREAM_DRAW:  Data is set only once and used by the GPU at most a few times.
+    // 2. GL_STATIC_DRAW:  Data is set only once and used many times.
+    // 3. GL_DYNAMIC_DRAW: Data is changed a lot and used many times.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -191,130 +191,133 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Load and create texture
-	unsigned int texture;
-	
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+    // Load and create texture
+    unsigned int texture;
+    
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
-	// Set texture wrapping and filtering options
+    // Set texture wrapping and filtering options
 
-	// Wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Wrapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	// Filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int width, height, nrChannels;
+    int width, height, nrChannels;
 
-	stbi_set_flip_vertically_on_load(1);
-	unsigned char *data = stbi_load("res/img/container.jpg", &width, &height, &nrChannels, 0);
+    stbi_set_flip_vertically_on_load(1);
+    unsigned char *data = stbi_load("res/img/container.jpg", &width, &height, &nrChannels, 0);
 
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
-		stbi_image_free(data);
-	}
+        stbi_image_free(data);
+    }
 
-	else {
-		printf("Failed to load image at res/img/container.jpg!\n");
-	}
+    else {
+        printf("Failed to load image at res/img/container.jpg!\n");
+    }
 
-	unsigned int texture2;
-	
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
+    unsigned int texture2;
+    
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
 
-	// Set texture wrapping and filtering options
+    // Set texture wrapping and filtering options
 
-	// Wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Wrapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	// Filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	unsigned char *data2 = stbi_load("res/img/Piboy314.png", &width, &height, &nrChannels, 0);
+    unsigned char *data2 = stbi_load("res/img/Piboy314.png", &width, &height, &nrChannels, 0);
 
-	if (data2) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
-		glGenerateMipmap(GL_TEXTURE_2D);
+    if (data2) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
-		stbi_image_free(data2);
-	}
+        stbi_image_free(data2);
+    }
 
-	else {
-		printf("Failed to load image at res/img/Piboy314.png!\n");
-	}
+    else {
+        printf("Failed to load image at res/img/Piboy314.png!\n");
+    }
 
-	// For each sampler tell openGL which texture unit it belongs to (only has to be done once)
+    // For each sampler tell openGL which texture unit it belongs to (only has to be done once)
     shaderUse(myShaderPtr); 
     shaderSetInt(myShaderPtr, "texture1", 0);
     shaderSetInt(myShaderPtr, "texture2", 1);
 
-	// Initialize variables for framerate counting
-	double lastTime = glfwGetTime();
-	int frameCount = 0;
+    // Initialize variables for framerate counting
+    double lastTime = glfwGetTime();
+    int frameCount = 0;
 
-	// Program loop
-	while (!glfwWindowShouldClose(window)) {
-		// Calculate framerate
-		double thisTime = glfwGetTime();
-		frameCount++;
+    // Program loop
+    while (!glfwWindowShouldClose(window)) {
+        // Calculate framerate
+        double thisTime = glfwGetTime();
+        frameCount++;
 
-		// If a second has passed.
-		if (thisTime - lastTime >= 1.0) {
-			printf("%i FPS\n", frameCount);
+        // If a second has passed.
+        if (thisTime - lastTime >= 1.0) {
+            printf("%i FPS\n", frameCount);
 
-			frameCount = 0;
-			lastTime = thisTime;
-		}
+            frameCount = 0;
+            lastTime = thisTime;
+        }
 
-		processInput(window);
+        processInput(window);
 
-		// Clear the window
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		
-		// Bind textures on texture units
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
+        // Clear the window
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        // Bind textures on texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
 
-		// Create transformations
-		mat4 transform = {{1.0f}};
+        // Create transformations
+        mat4 transform = {{1.0f}};
+        glm_mat4_identity(transform);
+
         glm_translate(transform, (vec3){0.5f, -0.5f, 0.0f});
         glm_rotate(transform, (float)glfwGetTime(), (vec3){0.0f, 0.0f, 1.0f});
 
-		// Get matrix's uniform location and set matrix
+        // Get matrix's uniform location and set matrix
         shaderUse(myShaderPtr);
         GLint transformLoc = glGetUniformLocation(myShaderPtr->shaderID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, *transform);
+        // mat4 transform;
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, (float*)transform);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		glfwSwapBuffers(window); // Swap the front and back buffers
-		glfwPollEvents(); // Check for events (mouse movement, mouse click, keyboard press, keyboard release etc.)
-	}
+        glfwSwapBuffers(window); // Swap the front and back buffers
+        glfwPollEvents(); // Check for events (mouse movement, mouse click, keyboard press, keyboard release etc.)
+    }
 
-	// Clean up VAO, VBO and EBO
-	glDeleteVertexArrays(1, &VAO);
+    // Clean up VAO, VBO and EBO
+    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 
-	// Clean up GLFW
-	glfwTerminate();
+    // Clean up GLFW
+    glfwTerminate();
 
-	return 0;
+    return 0;
 }
