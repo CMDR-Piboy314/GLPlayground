@@ -60,8 +60,8 @@ void shaderCheckCompileErrors(unsigned int shader, char* type) {
 // Constructor generates the shader on the fly
 void shaderInit(struct shaderStruct* shaderStructInstance, const char* vertexPath, const char* fragmentPath) {
     // 1. Get the source code from the files into strings
-    const char* vShaderCode = loadFile("src/shaders/tri.vert");
-    const char * fShaderCode = loadFile("src/shaders/tri.frag");
+    const char* vShaderCode = loadFile(vertexPath);
+    const char * fShaderCode = loadFile(fragPath);
 
     // 2. Compile shaders
     unsigned int vertex, fragment;
