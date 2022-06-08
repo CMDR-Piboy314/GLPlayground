@@ -10,7 +10,7 @@ struct shaderStruct {
 	int shaderID;
 };
 
-const char* loadFile(char* filepath) {
+const char* loadFile(const char* filepath) {
 	FILE *file = fopen(filepath, "r");
 	char *filecontents;
 
