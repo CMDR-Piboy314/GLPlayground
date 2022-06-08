@@ -61,7 +61,7 @@ void shaderCheckCompileErrors(unsigned int shader, char* type) {
 void shaderInit(struct shaderStruct* shaderStructInstance, const char* vertexPath, const char* fragmentPath) {
 	// 1. Get the source code from the files into strings
 	const char* vShaderCode = loadFile(vertexPath);
-	const char * fShaderCode = loadFile(fragPath);
+	const char * fShaderCode = loadFile(fragmentPath);
 
 	// 2. Compile shaders
 	unsigned int vertex, fragment;
