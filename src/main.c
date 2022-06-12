@@ -5,13 +5,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <glad.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <cglm/cglm.h>
 #include <cglm/call.h>
-
-// #include <linmath.h>
+#include <cglm/types.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -96,7 +95,7 @@ int main() {
 	#endif
 
 	#ifdef __linux__
-		printf("                 .88888888:.\n                88888888.88888.\n              .8888888888888888.\n              888888888888888888\n              88\' _`88'_  `88888\n              88 88 88 88  88888\n              88_88_::_88_:88888\n              88:::,::,:::::8888\n              88`:::::::::\'`8888\n             .88  `::::\'    8:88.\n            8888            `8:888.\n          .8888\'             `888888.\n         .8888:..  .::.  ...:\'8888888:.\n        .8888.'     :'     `\'::`88:88888\n       .8888        \'         `.888:8888.\n      888:8         .           888:88888\n    .888:88        .:           888:88888:\n    8888888.       ::           88:888888\n    `.::.888.      ::          .88888888\n   .::::::.888.    ::         :::`8888\'.:.\n  ::::::::::.888   \'         .::::::::::::\n  ::::::::::::.8    \'      .:8::::::::::::.\n .::::::::::::::.        .:888:::::::::::::\n :::::::::::::::88:.__..:88888:::::::::::\'\n  `\'.:::::::::::88888888888.88:::::::::\'\n        `\':::_:' -- \'' -'-' `\':_::::\'`\n");
+		printf("				 .88888888:.\n				88888888.88888.\n			  .8888888888888888.\n			  888888888888888888\n			  88\' _`88'_  `88888\n			  88 88 88 88  88888\n			  88_88_::_88_:88888\n			  88:::,::,:::::8888\n			  88`:::::::::\'`8888\n			 .88  `::::\'	8:88.\n			8888			`8:888.\n		  .8888\'			 `888888.\n		 .8888:..  .::.  ...:\'8888888:.\n		.8888.'	 :'	 `\'::`88:88888\n	   .8888		\'		 `.888:8888.\n	  888:8		 .		   888:88888\n	.888:88		.:		   888:88888:\n	8888888.	   ::		   88:888888\n	`.::.888.	  ::		  .88888888\n   .::::::.888.	::		 :::`8888\'.:.\n  ::::::::::.888   \'		 .::::::::::::\n  ::::::::::::.8	\'	  .:8::::::::::::.\n .::::::::::::::.		.:888:::::::::::::\n :::::::::::::::88:.__..:88888:::::::::::\'\n  `\'.:::::::::::88888888888.88:::::::::\'\n		`\':::_:' -- \'' -'-' `\':_::::\'`\n");
 	#endif
 
 	// Create window object, this object will hold all windowing data and required by most GLFW functions
@@ -137,18 +136,18 @@ int main() {
 	shaderInit(myShaderPtr, "src/shaders/tri.vert", "src/shaders/tri.frag");
 
 	float vertices[] = {
-		// Positions        |      Colours      | Texture Coords
-        //X      Y     Z    |  R     G     B    |  X     Y
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
-    };
+		// Positions		|	  Colours	  | Texture Coords
+		//X	  Y	 Z	|  R	 G	 B	|  X	 Y
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+	};
 
-    unsigned int indices[] = {  
-        0, 1, 3, // First triangle
-        1, 2, 3  // Second triangle
-    };
+	unsigned int indices[] = {  
+		0, 1, 3, // First triangle
+		1, 2, 3  // Second triangle
+	};
 
 	// Create VAO + VBO + EBO
 	// NOTE: The VAO stores
@@ -157,40 +156,40 @@ int main() {
 	// 3. Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.
 
 	// An EBO is a buffer that stores indices that OpenGL uses to decide what vertices to draw (indexed drawing)
-    unsigned int VBO, VAO, EBO;
-	
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+	unsigned int VBO, VAO, EBO;
 
-    glBindVertexArray(VAO);
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
 
 	// Ways for the graphics card to manage the data
 	// 1. GL_STREAM_DRAW:  Data is set only once and used by the GPU at most a few times.
 	// 2. GL_STATIC_DRAW:  Data is set only once and used many times.
 	// 3. GL_DYNAMIC_DRAW: Data is changed a lot and used many times.
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// Tell OpenGL how to handle the vertex data
 	// NOTE: Each vertex attribute takes its data from memory managed by a VBO
 	// and which VBO it takes its data from is determined by the VBO currently bound to GL_ARRAY_BUFFER when calling glVertexAttribPointer.
 	// Since the previously defined VBO is still bound before calling glVertexAttribPointer vertex attribute 0 is now associated with its vertex data.
 
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 
-    // Colour attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+	// Colour attribute
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
-    // Texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+	// Texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -257,6 +256,11 @@ int main() {
 		printf("Failed to load image at res/img/Piboy314.png!\n");
 	}
 
+	// For each sampler tell openGL which texture unit it belongs to (only has to be done once)
+	shaderUse(myShaderPtr); 
+	shaderSetInt(myShaderPtr, "texture1", 0);
+	shaderSetInt(myShaderPtr, "texture2", 1);
+
 	// Initialize variables for framerate counting
 	double lastTime = glfwGetTime();
 	int frameCount = 0;
@@ -281,28 +285,27 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		// Activate the texture unit before binding the texture
+		// Bind textures on texture units
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		// Transformations
-		mat4 trans = {1.0f};
-		
-		glm_rotate(trans, glm_rad(90.0f), (vec3){0.0, 0.0, 1.0});
+		// Create transformations
+		mat4 transform = {{1.0f}};
+		glm_mat4_identity(transform);
 
-		glm_scale(trans, (vec3){0.5, 0.5, 0.5});
+		glm_translate(transform, (vec3){0.5f, -0.5f, 0.0f});
+		glm_rotate(transform, (float)glfwGetTime(), (vec3){0.0f, 0.0f, 1.0f});
 
-		// Render the triangle
+		// Get matrix's uniform location and set matrix
 		shaderUse(myShaderPtr);
+		GLint transformLoc = glGetUniformLocation(myShaderPtr->shaderID, "transform");
+		// mat4 transform;
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, (float*)transform);
 
-		// Set uniforms
-		shaderSetInt(myShaderPtr, "texture1", 0);
-		shaderSetInt(myShaderPtr, "texture2", 1);
-
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window); // Swap the front and back buffers
 		glfwPollEvents(); // Check for events (mouse movement, mouse click, keyboard press, keyboard release etc.)
@@ -310,8 +313,8 @@ int main() {
 
 	// Clean up VAO, VBO and EBO
 	glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
 	// Clean up GLFW
 	glfwTerminate();
