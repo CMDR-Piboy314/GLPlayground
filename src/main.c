@@ -136,13 +136,12 @@ int main() {
 	shaderInit(myShaderPtr, "src/shaders/tri.vert", "src/shaders/tri.frag");
 
 	float vertices[] = {
-		// Positions		|	  Colours	  | Texture Coords
-		//X	  Y	 Z	|  R	 G	 B	|  X	 Y
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
-	};
+		//X      Y     Z       X     Y
+		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // Top right
+		 0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // Bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // Bottom left
+		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // Top left 
+    };
 
 	unsigned int indices[] = {  
 		0, 1, 3, // First triangle
@@ -291,18 +290,28 @@ int main() {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		// Create transformations
-		mat4 transform = {{1.0f}};
-		glm_mat4_identity(transform);
-
-		glm_translate(transform, (vec3){0.5f, -0.5f, 0.0f});
-		glm_rotate(transform, (float)glfwGetTime(), (vec3){0.0f, 0.0f, 1.0f});
-
-		// Get matrix's uniform location and set matrix
 		shaderUse(myShaderPtr);
-		GLint transformLoc = glGetUniformLocation(myShaderPtr->shaderID, "transform");
-		// mat4 transform;
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, (float*)transform);
+
+		// Create transformations
+		mat4 model      = {{1.0f}};
+		mat4 view       = {{1.0f}};
+		mat4 projection = {{1.0f}};
+
+		glm_rotate(model, glm_rad(-55.0f), (vec3){1.0f, 0.0f, 0.0f});
+
+		// Translating the scene in the reverse direction of where the user wants to move
+		glm_translate(view, (vec3){0.0f, 0.0f, -3.0f});
+		glm_perspective(glm_rad(45.0f), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f, projection);
+
+		// Retrieve the matrix uniform locations and pass them to the shaders
+		GLint modelLoc = glGetUniformLocation(myShaderPtr->shaderID, "model");
+		GLint viewLoc = glGetUniformLocation(myShaderPtr->shaderID, "view");
+		GLint projectionLoc = glGetUniformLocation(myShaderPtr->shaderID, "projection");
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &projection[0][0]);
+		//shaderSetMat4(myShaderPtr, "projection", projection);
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
