@@ -292,11 +292,13 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		// Create transformations
+		mat4 projection = {{1.0f}};
 		mat4 transform = {{1.0f}};
 		glm_mat4_identity(transform);
 
 		glm_translate(transform, (vec3){0.5f, -0.5f, 0.0f});
 		glm_rotate(transform, (float)glfwGetTime(), (vec3){0.0f, 0.0f, 1.0f});
+		glm_perspective(glm_rad(45.0f), (float)width / (float)height, 0.1f, 100.0f, projection);
 
 		// Get matrix's uniform location and set matrix
 		shaderUse(myShaderPtr);
