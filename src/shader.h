@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <glad/glad.h>
+#include "../lib/glad/include/glad/glad.h"
 
 struct shaderStruct {
 	int shaderID;

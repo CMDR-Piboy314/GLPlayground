@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <glad/glad.h>
+#include "../lib/glad/include/glad/glad.h"
 #include <GLFW/glfw3.h>
 
 #include <cglm/cglm.h>
@@ -13,7 +13,7 @@
 #include <cglm/types.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "../lib/stb/stb_image.h"
 
 // #define NK_IMPLEMENTATION
 // #include <nuklear/nuklear.h>
@@ -86,12 +86,12 @@ int main() {
 	// Tell GLFW we want to use OpenGL 3.3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	
+
 	// Load only modern OpenGL functions, core profile
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Enable debugging messages
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);  
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 	#ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -132,7 +132,7 @@ int main() {
 		glfwSwapInterval(1);
 	else
 		glfwSwapInterval(0);
-	
+
 	struct shaderStruct *myShaderPtr, myShader;
 	myShaderPtr = &myShader;
 
@@ -143,10 +143,10 @@ int main() {
 		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // Top right
 		 0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // Bottom right
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // Bottom left
-		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // Top left 
+		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // Top left
     };
 
-	unsigned int indices[] = {  
+	unsigned int indices[] = {
 		0, 1, 3, // First triangle
 		1, 2, 3  // Second triangle
 	};
@@ -200,14 +200,14 @@ int main() {
 
 	// Load and create texture
 	unsigned int texture;
-	
+
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// Set texture wrapping and filtering options
 
 	// Wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Filtering
@@ -231,14 +231,14 @@ int main() {
 	}
 
 	unsigned int texture2;
-	
+
 	glGenTextures(1, &texture2);
 	glBindTexture(GL_TEXTURE_2D, texture2);
 
 	// Set texture wrapping and filtering options
 
 	// Wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Filtering
@@ -259,7 +259,7 @@ int main() {
 	}
 
 	// For each sampler tell openGL which texture unit it belongs to (only has to be done once)
-	shaderUse(myShaderPtr); 
+	shaderUse(myShaderPtr);
 	shaderSetInt(myShaderPtr, "texture1", 0);
 	shaderSetInt(myShaderPtr, "texture2", 1);
 
@@ -286,7 +286,7 @@ int main() {
 		// Clear the window
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+
 		// Bind textures on texture units
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
@@ -296,17 +296,19 @@ int main() {
 		shaderUse(myShaderPtr);
 
 		// Create transformations
-		mat4 model      = {{1.0f}};
-		mat4 view       = {{1.0f}};
-		mat4 projection = {{1.0f}};
+		mat4 model, view, projection;
 
-		glm_rotate(model, glm_rad(-55.0f), (vec3){1.0f, 0.0f, 0.0f});
+		glm_mat4_identity(model);
+		glm_mat4_identity(view);
+		glm_mat4_identity(projection);
+
+		glm_rotate(model, (float)glfwGetTime() * glm_rad(50.0f), (vec3){0.5f, 1.0f, 0.0f});
 
 		// Translating the scene in the reverse direction of where the user wants to move
 		glm_translate(view, (vec3){0.0f, 0.0f, -3.0f});
-		glm_perspective(glm_rad(45.0f), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f, projection);
+        glm_perspective(glm_rad(45.0f), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f, projection);
 
-		// Retrieve the matrix uniform locations and pass them to the shaders
+        // Retrieve the matrix uniform locations and pass them to the shaders
 		GLint modelLoc = glGetUniformLocation(myShaderPtr->shaderID, "model");
 		GLint viewLoc = glGetUniformLocation(myShaderPtr->shaderID, "view");
 		GLint projectionLoc = glGetUniformLocation(myShaderPtr->shaderID, "projection");
@@ -317,7 +319,7 @@ int main() {
 		//shaderSetMat4(myShaderPtr, "projection", projection);
 
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window); // Swap the front and back buffers
 		glfwPollEvents(); // Check for events (mouse movement, mouse click, keyboard press, keyboard release etc.)
